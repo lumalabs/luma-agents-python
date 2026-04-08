@@ -4,18 +4,9 @@ from typing import List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .generation_output import GenerationOutput
 
-__all__ = ["Generation", "Output"]
-
-
-class Output(BaseModel):
-    """A single generated output"""
-
-    type: str
-    """Media type (e.g. image)"""
-
-    url: str
-    """Presigned URL (1hr expiry)"""
+__all__ = ["Generation"]
 
 
 class Generation(BaseModel):
@@ -39,5 +30,5 @@ class Generation(BaseModel):
     failure_reason: Optional[str] = None
     """Error description (populated on failure)"""
 
-    output: Optional[List[Output]] = None
+    output: Optional[List[GenerationOutput]] = None
     """Generated outputs (populated on completion)"""
