@@ -1,27 +1,25 @@
-# Luma Agents Python API library
+# Luma Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/luma_agents.svg?label=pypi%20(stable))](https://pypi.org/project/luma_agents/)
+[![PyPI version](https://img.shields.io/pypi/v/luma-agents.svg?label=pypi%20(stable))](https://pypi.org/project/luma-agents/)
 
-The Luma Agents Python library provides convenient access to the Luma Agents REST API from any Python 3.9+
+The Luma Python library provides convenient access to the Luma REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
-It is generated with [Stainless](https://www.stainless.com/).
-
 ## Documentation
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [luma-agents.stldocs.app](https://luma-agents.stldocs.app). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
 ```sh
-# install from this staging repo
-pip install git+ssh://git@github.com/stainless-sdks/luma-agents-python.git
+# install from the production repo
+pip install git+ssh://git@github.com/lumalabs/luma-agents-python.git
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install luma_agents`
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install luma-agents`
 
 ## Usage
 
@@ -29,46 +27,50 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from luma_agents import LumaAgents
+from luma_agents import Luma
 
-client = LumaAgents(
-    api_key=os.environ.get("PETSTORE_API_KEY"),  # This is the default and can be omitted
+client = Luma(
+    auth_token=os.environ.get("LUMA_AGENTS_API_KEY"),  # This is the default and can be omitted
+    # defaults to "production".
+    environment="staging",
 )
 
-order = client.store.orders.create(
-    pet_id=1,
-    quantity=1,
-    status="placed",
+generation = client.generations.create(
+    prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+    aspect_ratio="16:9",
+    model="uni-1",
 )
-print(order.id)
+print(generation.id)
 ```
 
-While you can provide an `api_key` keyword argument,
+While you can provide a `auth_token` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `PETSTORE_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
+to add `LUMA_AGENTS_API_KEY="My Auth Token"` to your `.env` file
+so that your Auth Token is not stored in source control.
 
 ## Async usage
 
-Simply import `AsyncLumaAgents` instead of `LumaAgents` and use `await` with each API call:
+Simply import `AsyncLuma` instead of `Luma` and use `await` with each API call:
 
 ```python
 import os
 import asyncio
-from luma_agents import AsyncLumaAgents
+from luma_agents import AsyncLuma
 
-client = AsyncLumaAgents(
-    api_key=os.environ.get("PETSTORE_API_KEY"),  # This is the default and can be omitted
+client = AsyncLuma(
+    auth_token=os.environ.get("LUMA_AGENTS_API_KEY"),  # This is the default and can be omitted
+    # defaults to "production".
+    environment="staging",
 )
 
 
 async def main() -> None:
-    order = await client.store.orders.create(
-        pet_id=1,
-        quantity=1,
-        status="placed",
+    generation = await client.generations.create(
+        prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+        aspect_ratio="16:9",
+        model="uni-1",
     )
-    print(order.id)
+    print(generation.id)
 
 
 asyncio.run(main())
@@ -83,8 +85,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from this staging repo
-pip install 'luma_agents[aiohttp] @ git+ssh://git@github.com/stainless-sdks/luma-agents-python.git'
+# install from the production repo
+pip install 'luma-agents[aiohttp] @ git+ssh://git@github.com/lumalabs/luma-agents-python.git'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -93,20 +95,20 @@ Then you can enable it by instantiating the client with `http_client=DefaultAioH
 import os
 import asyncio
 from luma_agents import DefaultAioHttpClient
-from luma_agents import AsyncLumaAgents
+from luma_agents import AsyncLuma
 
 
 async def main() -> None:
-    async with AsyncLumaAgents(
-        api_key=os.environ.get("PETSTORE_API_KEY"),  # This is the default and can be omitted
+    async with AsyncLuma(
+        auth_token=os.environ.get("LUMA_AGENTS_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        order = await client.store.orders.create(
-            pet_id=1,
-            quantity=1,
-            status="placed",
+        generation = await client.generations.create(
+            prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+            aspect_ratio="16:9",
+            model="uni-1",
         )
-        print(order.id)
+        print(generation.id)
 
 
 asyncio.run(main())
@@ -126,16 +128,15 @@ Typed requests and responses provide autocomplete and documentation within your 
 Nested parameters are dictionaries, typed using `TypedDict`, for example:
 
 ```python
-from luma_agents import LumaAgents
+from luma_agents import Luma
 
-client = LumaAgents()
+client = Luma()
 
-pet = client.pets.create(
-    name="doggie",
-    photo_urls=["string"],
-    category={},
+generation = client.generations.create(
+    prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+    source={},
 )
-print(pet.category)
+print(generation.source)
 ```
 
 ## Handling errors
@@ -149,12 +150,16 @@ All errors inherit from `luma_agents.APIError`.
 
 ```python
 import luma_agents
-from luma_agents import LumaAgents
+from luma_agents import Luma
 
-client = LumaAgents()
+client = Luma()
 
 try:
-    client.store.list_inventory()
+    client.generations.create(
+        prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+        aspect_ratio="16:9",
+        model="uni-1",
+    )
 except luma_agents.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -188,16 +193,20 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from luma_agents import LumaAgents
+from luma_agents import Luma
 
 # Configure the default for all requests:
-client = LumaAgents(
+client = Luma(
     # default is 2
     max_retries=0,
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).store.list_inventory()
+client.with_options(max_retries=5).generations.create(
+    prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+    aspect_ratio="16:9",
+    model="uni-1",
+)
 ```
 
 ### Timeouts
@@ -206,21 +215,25 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
-from luma_agents import LumaAgents
+from luma_agents import Luma
 
 # Configure the default for all requests:
-client = LumaAgents(
+client = Luma(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = LumaAgents(
+client = Luma(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).store.list_inventory()
+client.with_options(timeout=5.0).generations.create(
+    prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+    aspect_ratio="16:9",
+    model="uni-1",
+)
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -233,10 +246,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `LUMA_AGENTS_LOG` to `info`.
+You can enable logging by setting the environment variable `LUMA_LOG` to `info`.
 
 ```shell
-$ export LUMA_AGENTS_LOG=info
+$ export LUMA_LOG=info
 ```
 
 Or to `debug` for more verbose logging.
@@ -258,19 +271,23 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from luma_agents import LumaAgents
+from luma_agents import Luma
 
-client = LumaAgents()
-response = client.store.with_raw_response.list_inventory()
+client = Luma()
+response = client.generations.with_raw_response.create(
+    prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+    aspect_ratio="16:9",
+    model="uni-1",
+)
 print(response.headers.get('X-My-Header'))
 
-store = response.parse()  # get the object that `store.list_inventory()` would have returned
-print(store)
+generation = response.parse()  # get the object that `generations.create()` would have returned
+print(generation.id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/luma-agents-python/tree/main/src/luma_agents/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/lumalabs/luma-agents-python/tree/main/src/luma_agents/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/luma-agents-python/tree/main/src/luma_agents/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/lumalabs/luma-agents-python/tree/main/src/luma_agents/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -279,7 +296,11 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.store.with_streaming_response.list_inventory() as response:
+with client.generations.with_streaming_response.create(
+    prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
+    aspect_ratio="16:9",
+    model="uni-1",
+) as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
@@ -332,10 +353,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from luma_agents import LumaAgents, DefaultHttpxClient
+from luma_agents import Luma, DefaultHttpxClient
 
-client = LumaAgents(
-    # Or use the `LUMA_AGENTS_BASE_URL` env var
+client = Luma(
+    # Or use the `LUMA_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxy="http://my.test.proxy.example.com",
@@ -355,9 +376,9 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from luma_agents import LumaAgents
+from luma_agents import Luma
 
-with LumaAgents() as client:
+with Luma() as client:
   # make requests here
   ...
 
@@ -374,7 +395,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/luma-agents-python/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/lumalabs/luma-agents-python/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 
