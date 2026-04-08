@@ -3,7 +3,7 @@
 Types:
 
 ```python
-from luma_agents.types import Generation
+from luma_agents.types import Generation, GenerationOutput
 ```
 
 Methods:
