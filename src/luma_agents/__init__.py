@@ -6,15 +6,16 @@ from . import types
 from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes, omit, not_given
 from ._utils import file_from_path
 from ._client import (
+    ENVIRONMENTS,
+    Luma,
     Client,
     Stream,
     Timeout,
+    AsyncLuma,
     Transport,
-    LumaAgents,
     AsyncClient,
     AsyncStream,
     RequestOptions,
-    AsyncLumaAgents,
 )
 from ._models import BaseModel
 from ._version import __title__, __version__
@@ -22,13 +23,13 @@ from ._response import APIResponse as APIResponse, AsyncAPIResponse as AsyncAPIR
 from ._constants import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES, DEFAULT_CONNECTION_LIMITS
 from ._exceptions import (
     APIError,
+    LumaError,
     ConflictError,
     NotFoundError,
     APIStatusError,
     RateLimitError,
     APITimeoutError,
     BadRequestError,
-    LumaAgentsError,
     APIConnectionError,
     AuthenticationError,
     InternalServerError,
@@ -51,7 +52,7 @@ __all__ = [
     "not_given",
     "Omit",
     "omit",
-    "LumaAgentsError",
+    "LumaError",
     "APIError",
     "APIStatusError",
     "APITimeoutError",
@@ -71,8 +72,9 @@ __all__ = [
     "AsyncClient",
     "Stream",
     "AsyncStream",
-    "LumaAgents",
-    "AsyncLumaAgents",
+    "Luma",
+    "AsyncLuma",
+    "ENVIRONMENTS",
     "file_from_path",
     "BaseModel",
     "DEFAULT_TIMEOUT",

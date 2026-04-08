@@ -12,7 +12,7 @@ import httpx
 from ._utils import extract_type_var_from_base
 
 if TYPE_CHECKING:
-    from ._client import LumaAgents, AsyncLumaAgents
+    from ._client import Luma, AsyncLuma
     from ._models import FinalRequestOptions
 
 
@@ -31,7 +31,7 @@ class Stream(Generic[_T]):
         *,
         cast_to: type[_T],
         response: httpx.Response,
-        client: LumaAgents,
+        client: Luma,
         options: Optional[FinalRequestOptions] = None,
     ) -> None:
         self.response = response
@@ -96,7 +96,7 @@ class AsyncStream(Generic[_T]):
         *,
         cast_to: type[_T],
         response: httpx.Response,
-        client: AsyncLumaAgents,
+        client: AsyncLuma,
         options: Optional[FinalRequestOptions] = None,
     ) -> None:
         self.response = response

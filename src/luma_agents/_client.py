@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Mapping
-from typing_extensions import Self, override
+from typing import TYPE_CHECKING, Any, Dict, Mapping, cast
+from typing_extensions import Self, Literal, override
 
 import httpx
 
@@ -21,10 +21,9 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._compat import cached_property
-from ._models import SecurityOptions
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import APIStatusError, LumaAgentsError
+from ._exceptions import LumaError, APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -32,32 +31,39 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import pets, store, users
-    from .resources.pets import PetsResource, AsyncPetsResource
-    from .resources.users import UsersResource, AsyncUsersResource
-    from .resources.store.store import StoreResource, AsyncStoreResource
+    from .resources import generations
+    from .resources.generations import GenerationsResource, AsyncGenerationsResource
 
 __all__ = [
+    "ENVIRONMENTS",
     "Timeout",
     "Transport",
     "ProxiesTypes",
     "RequestOptions",
-    "LumaAgents",
-    "AsyncLumaAgents",
+    "Luma",
+    "AsyncLuma",
     "Client",
     "AsyncClient",
 ]
 
+ENVIRONMENTS: Dict[str, str] = {
+    "production": "https://agents.lumalabs.ai/v1",
+    "staging": "https://vespa-service.sandbox.labs.lumalabs.ai/v1",
+}
 
-class LumaAgents(SyncAPIClient):
+
+class Luma(SyncAPIClient):
     # client options
-    api_key: str
+    auth_token: str
+
+    _environment: Literal["production", "staging"] | NotGiven
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
-        base_url: str | httpx.URL | None = None,
+        auth_token: str | None = None,
+        environment: Literal["production", "staging"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
@@ -76,22 +82,43 @@ class LumaAgents(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous LumaAgents client instance.
+        """Construct a new synchronous Luma client instance.
 
-        This automatically infers the `api_key` argument from the `PETSTORE_API_KEY` environment variable if it is not provided.
+        This automatically infers the `auth_token` argument from the `LUMA_AGENTS_API_KEY` environment variable if it is not provided.
         """
-        if api_key is None:
-            api_key = os.environ.get("PETSTORE_API_KEY")
-        if api_key is None:
-            raise LumaAgentsError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the PETSTORE_API_KEY environment variable"
+        if auth_token is None:
+            auth_token = os.environ.get("LUMA_AGENTS_API_KEY")
+        if auth_token is None:
+            raise LumaError(
+                "The auth_token client option must be set either by passing auth_token to the client or by setting the LUMA_AGENTS_API_KEY environment variable"
             )
-        self.api_key = api_key
+        self.auth_token = auth_token
 
-        if base_url is None:
-            base_url = os.environ.get("LUMA_AGENTS_BASE_URL")
-        if base_url is None:
-            base_url = f"https://petstore3.swagger.io/api/v3"
+        self._environment = environment
+
+        base_url_env = os.environ.get("LUMA_BASE_URL")
+        if is_given(base_url) and base_url is not None:
+            # cast required because mypy doesn't understand the type narrowing
+            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+        elif is_given(environment):
+            if base_url_env and base_url is not None:
+                raise ValueError(
+                    "Ambiguous URL; The `LUMA_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                )
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
+        elif base_url_env is not None:
+            base_url = base_url_env
+        else:
+            self._environment = environment = "production"
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
 
         super().__init__(
             version=__version__,
@@ -105,49 +132,29 @@ class LumaAgents(SyncAPIClient):
         )
 
     @cached_property
-    def pets(self) -> PetsResource:
-        """Everything about your Pets"""
-        from .resources.pets import PetsResource
+    def generations(self) -> GenerationsResource:
+        from .resources.generations import GenerationsResource
 
-        return PetsResource(self)
-
-    @cached_property
-    def store(self) -> StoreResource:
-        """Access to Petstore orders"""
-        from .resources.store import StoreResource
-
-        return StoreResource(self)
+        return GenerationsResource(self)
 
     @cached_property
-    def users(self) -> UsersResource:
-        """Operations about user"""
-        from .resources.users import UsersResource
-
-        return UsersResource(self)
+    def with_raw_response(self) -> LumaWithRawResponse:
+        return LumaWithRawResponse(self)
 
     @cached_property
-    def with_raw_response(self) -> LumaAgentsWithRawResponse:
-        return LumaAgentsWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> LumaAgentsWithStreamedResponse:
-        return LumaAgentsWithStreamedResponse(self)
+    def with_streaming_response(self) -> LumaWithStreamedResponse:
+        return LumaWithStreamedResponse(self)
 
     @property
     @override
     def qs(self) -> Querystring:
         return Querystring(array_format="comma")
 
-    @override
-    def _auth_headers(self, security: SecurityOptions) -> dict[str, str]:
-        return {
-            **(self._api_key if security.get("api_key", False) else {}),
-        }
-
     @property
-    def _api_key(self) -> dict[str, str]:
-        api_key = self.api_key
-        return {"api_key": api_key}
+    @override
+    def auth_headers(self) -> dict[str, str]:
+        auth_token = self.auth_token
+        return {"Authorization": f"Bearer {auth_token}"}
 
     @property
     @override
@@ -161,7 +168,8 @@ class LumaAgents(SyncAPIClient):
     def copy(
         self,
         *,
-        api_key: str | None = None,
+        auth_token: str | None = None,
+        environment: Literal["production", "staging"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
@@ -195,8 +203,9 @@ class LumaAgents(SyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
+            auth_token=auth_token or self.auth_token,
             base_url=base_url or self.base_url,
+            environment=environment or self._environment,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
@@ -243,15 +252,18 @@ class LumaAgents(SyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class AsyncLumaAgents(AsyncAPIClient):
+class AsyncLuma(AsyncAPIClient):
     # client options
-    api_key: str
+    auth_token: str
+
+    _environment: Literal["production", "staging"] | NotGiven
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
-        base_url: str | httpx.URL | None = None,
+        auth_token: str | None = None,
+        environment: Literal["production", "staging"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
@@ -270,22 +282,43 @@ class AsyncLumaAgents(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async AsyncLumaAgents client instance.
+        """Construct a new async AsyncLuma client instance.
 
-        This automatically infers the `api_key` argument from the `PETSTORE_API_KEY` environment variable if it is not provided.
+        This automatically infers the `auth_token` argument from the `LUMA_AGENTS_API_KEY` environment variable if it is not provided.
         """
-        if api_key is None:
-            api_key = os.environ.get("PETSTORE_API_KEY")
-        if api_key is None:
-            raise LumaAgentsError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the PETSTORE_API_KEY environment variable"
+        if auth_token is None:
+            auth_token = os.environ.get("LUMA_AGENTS_API_KEY")
+        if auth_token is None:
+            raise LumaError(
+                "The auth_token client option must be set either by passing auth_token to the client or by setting the LUMA_AGENTS_API_KEY environment variable"
             )
-        self.api_key = api_key
+        self.auth_token = auth_token
 
-        if base_url is None:
-            base_url = os.environ.get("LUMA_AGENTS_BASE_URL")
-        if base_url is None:
-            base_url = f"https://petstore3.swagger.io/api/v3"
+        self._environment = environment
+
+        base_url_env = os.environ.get("LUMA_BASE_URL")
+        if is_given(base_url) and base_url is not None:
+            # cast required because mypy doesn't understand the type narrowing
+            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+        elif is_given(environment):
+            if base_url_env and base_url is not None:
+                raise ValueError(
+                    "Ambiguous URL; The `LUMA_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                )
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
+        elif base_url_env is not None:
+            base_url = base_url_env
+        else:
+            self._environment = environment = "production"
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
 
         super().__init__(
             version=__version__,
@@ -299,49 +332,29 @@ class AsyncLumaAgents(AsyncAPIClient):
         )
 
     @cached_property
-    def pets(self) -> AsyncPetsResource:
-        """Everything about your Pets"""
-        from .resources.pets import AsyncPetsResource
+    def generations(self) -> AsyncGenerationsResource:
+        from .resources.generations import AsyncGenerationsResource
 
-        return AsyncPetsResource(self)
-
-    @cached_property
-    def store(self) -> AsyncStoreResource:
-        """Access to Petstore orders"""
-        from .resources.store import AsyncStoreResource
-
-        return AsyncStoreResource(self)
+        return AsyncGenerationsResource(self)
 
     @cached_property
-    def users(self) -> AsyncUsersResource:
-        """Operations about user"""
-        from .resources.users import AsyncUsersResource
-
-        return AsyncUsersResource(self)
+    def with_raw_response(self) -> AsyncLumaWithRawResponse:
+        return AsyncLumaWithRawResponse(self)
 
     @cached_property
-    def with_raw_response(self) -> AsyncLumaAgentsWithRawResponse:
-        return AsyncLumaAgentsWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> AsyncLumaAgentsWithStreamedResponse:
-        return AsyncLumaAgentsWithStreamedResponse(self)
+    def with_streaming_response(self) -> AsyncLumaWithStreamedResponse:
+        return AsyncLumaWithStreamedResponse(self)
 
     @property
     @override
     def qs(self) -> Querystring:
         return Querystring(array_format="comma")
 
-    @override
-    def _auth_headers(self, security: SecurityOptions) -> dict[str, str]:
-        return {
-            **(self._api_key if security.get("api_key", False) else {}),
-        }
-
     @property
-    def _api_key(self) -> dict[str, str]:
-        api_key = self.api_key
-        return {"api_key": api_key}
+    @override
+    def auth_headers(self) -> dict[str, str]:
+        auth_token = self.auth_token
+        return {"Authorization": f"Bearer {auth_token}"}
 
     @property
     @override
@@ -355,7 +368,8 @@ class AsyncLumaAgents(AsyncAPIClient):
     def copy(
         self,
         *,
-        api_key: str | None = None,
+        auth_token: str | None = None,
+        environment: Literal["production", "staging"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
@@ -389,8 +403,9 @@ class AsyncLumaAgents(AsyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
+            auth_token=auth_token or self.auth_token,
             base_url=base_url or self.base_url,
+            environment=environment or self._environment,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
@@ -437,118 +452,58 @@ class AsyncLumaAgents(AsyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class LumaAgentsWithRawResponse:
-    _client: LumaAgents
+class LumaWithRawResponse:
+    _client: Luma
 
-    def __init__(self, client: LumaAgents) -> None:
+    def __init__(self, client: Luma) -> None:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.PetsResourceWithRawResponse:
-        """Everything about your Pets"""
-        from .resources.pets import PetsResourceWithRawResponse
+    def generations(self) -> generations.GenerationsResourceWithRawResponse:
+        from .resources.generations import GenerationsResourceWithRawResponse
 
-        return PetsResourceWithRawResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.StoreResourceWithRawResponse:
-        """Access to Petstore orders"""
-        from .resources.store import StoreResourceWithRawResponse
-
-        return StoreResourceWithRawResponse(self._client.store)
-
-    @cached_property
-    def users(self) -> users.UsersResourceWithRawResponse:
-        """Operations about user"""
-        from .resources.users import UsersResourceWithRawResponse
-
-        return UsersResourceWithRawResponse(self._client.users)
+        return GenerationsResourceWithRawResponse(self._client.generations)
 
 
-class AsyncLumaAgentsWithRawResponse:
-    _client: AsyncLumaAgents
+class AsyncLumaWithRawResponse:
+    _client: AsyncLuma
 
-    def __init__(self, client: AsyncLumaAgents) -> None:
+    def __init__(self, client: AsyncLuma) -> None:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.AsyncPetsResourceWithRawResponse:
-        """Everything about your Pets"""
-        from .resources.pets import AsyncPetsResourceWithRawResponse
+    def generations(self) -> generations.AsyncGenerationsResourceWithRawResponse:
+        from .resources.generations import AsyncGenerationsResourceWithRawResponse
 
-        return AsyncPetsResourceWithRawResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.AsyncStoreResourceWithRawResponse:
-        """Access to Petstore orders"""
-        from .resources.store import AsyncStoreResourceWithRawResponse
-
-        return AsyncStoreResourceWithRawResponse(self._client.store)
-
-    @cached_property
-    def users(self) -> users.AsyncUsersResourceWithRawResponse:
-        """Operations about user"""
-        from .resources.users import AsyncUsersResourceWithRawResponse
-
-        return AsyncUsersResourceWithRawResponse(self._client.users)
+        return AsyncGenerationsResourceWithRawResponse(self._client.generations)
 
 
-class LumaAgentsWithStreamedResponse:
-    _client: LumaAgents
+class LumaWithStreamedResponse:
+    _client: Luma
 
-    def __init__(self, client: LumaAgents) -> None:
+    def __init__(self, client: Luma) -> None:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.PetsResourceWithStreamingResponse:
-        """Everything about your Pets"""
-        from .resources.pets import PetsResourceWithStreamingResponse
+    def generations(self) -> generations.GenerationsResourceWithStreamingResponse:
+        from .resources.generations import GenerationsResourceWithStreamingResponse
 
-        return PetsResourceWithStreamingResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.StoreResourceWithStreamingResponse:
-        """Access to Petstore orders"""
-        from .resources.store import StoreResourceWithStreamingResponse
-
-        return StoreResourceWithStreamingResponse(self._client.store)
-
-    @cached_property
-    def users(self) -> users.UsersResourceWithStreamingResponse:
-        """Operations about user"""
-        from .resources.users import UsersResourceWithStreamingResponse
-
-        return UsersResourceWithStreamingResponse(self._client.users)
+        return GenerationsResourceWithStreamingResponse(self._client.generations)
 
 
-class AsyncLumaAgentsWithStreamedResponse:
-    _client: AsyncLumaAgents
+class AsyncLumaWithStreamedResponse:
+    _client: AsyncLuma
 
-    def __init__(self, client: AsyncLumaAgents) -> None:
+    def __init__(self, client: AsyncLuma) -> None:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.AsyncPetsResourceWithStreamingResponse:
-        """Everything about your Pets"""
-        from .resources.pets import AsyncPetsResourceWithStreamingResponse
+    def generations(self) -> generations.AsyncGenerationsResourceWithStreamingResponse:
+        from .resources.generations import AsyncGenerationsResourceWithStreamingResponse
 
-        return AsyncPetsResourceWithStreamingResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.AsyncStoreResourceWithStreamingResponse:
-        """Access to Petstore orders"""
-        from .resources.store import AsyncStoreResourceWithStreamingResponse
-
-        return AsyncStoreResourceWithStreamingResponse(self._client.store)
-
-    @cached_property
-    def users(self) -> users.AsyncUsersResourceWithStreamingResponse:
-        """Operations about user"""
-        from .resources.users import AsyncUsersResourceWithStreamingResponse
-
-        return AsyncUsersResourceWithStreamingResponse(self._client.users)
+        return AsyncGenerationsResourceWithStreamingResponse(self._client.generations)
 
 
-Client = LumaAgents
+Client = Luma
 
-AsyncClient = AsyncLumaAgents
+AsyncClient = AsyncLuma
