@@ -5,6 +5,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 from .generation_output import GenerationOutput
+from .generation_failure_code import GenerationFailureCode
 
 __all__ = ["Generation"]
 
@@ -27,7 +28,7 @@ class Generation(BaseModel):
     type: Literal["image", "image_edit"]
     """The kind of generation to perform"""
 
-    failure_code: Optional[Literal["content_moderated", "generation_failed", "output_not_found"]] = None
+    failure_code: Optional[GenerationFailureCode] = None
     """Machine-readable failure code for programmatic handling"""
 
     failure_reason: Optional[str] = None
