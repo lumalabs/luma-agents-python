@@ -27,8 +27,11 @@ class Generation(BaseModel):
     type: Literal["image", "image_edit"]
     """The kind of generation to perform"""
 
+    failure_code: Optional[Literal["content_moderated", "generation_failed", "output_not_found"]] = None
+    """Machine-readable failure code for programmatic handling"""
+
     failure_reason: Optional[str] = None
-    """Error description (populated on failure)"""
+    """Human-readable failure description"""
 
     output: Optional[List[GenerationOutput]] = None
     """Generated outputs (populated on completion)"""
