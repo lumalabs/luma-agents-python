@@ -31,8 +31,6 @@ from luma_agents import Luma
 
 client = Luma(
     auth_token=os.environ.get("LUMA_AGENTS_API_KEY"),  # This is the default and can be omitted
-    # defaults to "production".
-    environment="staging",
 )
 
 generation = client.generations.create(
@@ -59,8 +57,6 @@ from luma_agents import AsyncLuma
 
 client = AsyncLuma(
     auth_token=os.environ.get("LUMA_AGENTS_API_KEY"),  # This is the default and can be omitted
-    # defaults to "production".
-    environment="staging",
 )
 
 
