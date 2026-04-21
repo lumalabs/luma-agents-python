@@ -4,4 +4,6 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["GenerationFailureCode"]
 
-GenerationFailureCode: TypeAlias = Literal["content_moderated", "generation_failed", "output_not_found"]
+GenerationFailureCode: TypeAlias = Literal[
+    "content_moderated", "generation_failed", "budget_exhausted", "output_not_found"
+]

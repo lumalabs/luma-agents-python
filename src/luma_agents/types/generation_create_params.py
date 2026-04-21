@@ -16,7 +16,10 @@ class GenerationCreateParams(TypedDict, total=False):
     """Output aspect ratio"""
 
     image_ref: Iterable[ImageRef]
-    """Reference images for style/content guidance. Up to 8 reference images."""
+    """Reference images for style/content guidance.
+
+    Up to 9 for type 'image', up to 8 for type 'image_edit'.
+    """
 
     model: str
     """Model to use"""

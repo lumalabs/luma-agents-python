@@ -73,7 +73,8 @@ class GenerationsResource(SyncAPIResource):
 
           aspect_ratio: Output aspect ratio
 
-          image_ref: Reference images for style/content guidance. Up to 8 reference images.
+          image_ref: Reference images for style/content guidance. Up to 9 for type 'image', up to 8
+              for type 'image_edit'.
 
           model: Model to use
 
@@ -204,7 +205,8 @@ class AsyncGenerationsResource(AsyncAPIResource):
 
           aspect_ratio: Output aspect ratio
 
-          image_ref: Reference images for style/content guidance. Up to 8 reference images.
+          image_ref: Reference images for style/content guidance. Up to 9 for type 'image', up to 8
+              for type 'image_edit'.
 
           model: Model to use
 
