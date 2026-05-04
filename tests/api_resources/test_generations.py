@@ -36,7 +36,7 @@ class TestGenerations:
                     "url": "url",
                 }
             ],
-            model="model",
+            model="uni-1",
             output_format="png",
             source={
                 "data": "data",
@@ -137,7 +137,7 @@ class TestAsyncGenerations:
                     "url": "url",
                 }
             ],
-            model="model",
+            model="uni-1",
             output_format="png",
             source={
                 "data": "data",
