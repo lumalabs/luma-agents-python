@@ -5,5 +5,13 @@ from typing_extensions import Literal, TypeAlias
 __all__ = ["GenerationFailureCode"]
 
 GenerationFailureCode: TypeAlias = Literal[
-    "content_moderated", "generation_failed", "budget_exhausted", "output_not_found"
+    "content_moderated",
+    "generation_failed",
+    "budget_exhausted",
+    "output_not_found",
+    "image_too_large",
+    "unsupported_format",
+    "corrupt_input",
+    "invalid_request",
+    "rate_limited",
 ]

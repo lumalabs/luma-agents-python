@@ -45,6 +45,7 @@ class TestGenerations:
             },
             style="auto",
             type="image",
+            user_id="user_id",
             web_search=True,
         )
         assert_matches_type(Generation, generation, path=["response"])
@@ -145,6 +146,7 @@ class TestAsyncGenerations:
             },
             style="auto",
             type="image",
+            user_id="user_id",
             web_search=True,
         )
         assert_matches_type(Generation, generation, path=["response"])
