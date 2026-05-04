@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import generation_create_params
+from ..types import Model, generation_create_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -18,6 +18,7 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from ..types.model import Model
 from .._base_client import make_request_options
 from ..types.generation import Generation
 
@@ -50,7 +51,7 @@ class GenerationsResource(SyncAPIResource):
         prompt: str,
         aspect_ratio: Optional[Literal["3:1", "2:1", "16:9", "3:2", "1:1", "2:3", "9:16", "1:2", "1:3"]] | Omit = omit,
         image_ref: Iterable[generation_create_params.ImageRef] | Omit = omit,
-        model: str | Omit = omit,
+        model: Model | Omit = omit,
         output_format: Optional[Literal["png", "jpeg"]] | Omit = omit,
         source: Optional[generation_create_params.Source] | Omit = omit,
         style: Literal["auto", "manga"] | Omit = omit,
@@ -77,7 +78,9 @@ class GenerationsResource(SyncAPIResource):
           image_ref: Reference images for style/content guidance. Up to 9 for type 'image', up to 8
               for type 'image_edit'.
 
-          model: Model to use
+          model: Model identifier. `uni-1` is the default tier; `uni-1-max` produces
+              higher-quality output than `uni-1` at a higher per-image price. Both models are
+              available to all accounts — see Pricing for per-image rates.
 
           output_format: Output image format
 
@@ -190,7 +193,7 @@ class AsyncGenerationsResource(AsyncAPIResource):
         prompt: str,
         aspect_ratio: Optional[Literal["3:1", "2:1", "16:9", "3:2", "1:1", "2:3", "9:16", "1:2", "1:3"]] | Omit = omit,
         image_ref: Iterable[generation_create_params.ImageRef] | Omit = omit,
-        model: str | Omit = omit,
+        model: Model | Omit = omit,
         output_format: Optional[Literal["png", "jpeg"]] | Omit = omit,
         source: Optional[generation_create_params.Source] | Omit = omit,
         style: Literal["auto", "manga"] | Omit = omit,
@@ -217,7 +220,9 @@ class AsyncGenerationsResource(AsyncAPIResource):
           image_ref: Reference images for style/content guidance. Up to 9 for type 'image', up to 8
               for type 'image_edit'.
 
-          model: Model to use
+          model: Model identifier. `uni-1` is the default tier; `uni-1-max` produces
+              higher-quality output than `uni-1` at a higher per-image price. Both models are
+              available to all accounts — see Pricing for per-image rates.
 
           output_format: Output image format
 
