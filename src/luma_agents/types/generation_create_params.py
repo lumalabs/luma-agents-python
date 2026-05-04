@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import Iterable, Optional
 from typing_extensions import Literal, Required, TypedDict
 
+from .model import Model
+
 __all__ = ["GenerationCreateParams", "ImageRef", "Source"]
 
 
@@ -21,8 +23,13 @@ class GenerationCreateParams(TypedDict, total=False):
     Up to 9 for type 'image', up to 8 for type 'image_edit'.
     """
 
-    model: str
-    """Model to use"""
+    model: Model
+    """Model identifier.
+
+    `uni-1` is the default tier; `uni-1-max` produces higher-quality output than
+    `uni-1` at a higher per-image price. Both models are available to all accounts —
+    see Pricing for per-image rates.
+    """
 
     output_format: Optional[Literal["png", "jpeg"]]
     """Output image format"""

@@ -3,6 +3,7 @@
 from typing import List, Optional
 from typing_extensions import Literal
 
+from .model import Model
 from .._models import BaseModel
 from .generation_output import GenerationOutput
 from .generation_failure_code import GenerationFailureCode
@@ -19,7 +20,7 @@ class Generation(BaseModel):
     created_at: str
     """Creation timestamp"""
 
-    model: str
+    model: Model
     """Model used"""
 
     state: Literal["queued", "processing", "completed", "failed"]
