@@ -39,6 +39,15 @@ class GenerationCreateParams(TypedDict, total=False):
     type: Literal["image", "image_edit"]
     """The kind of generation to perform"""
 
+    user_id: Optional[str]
+    """Your end-user's stable opaque identifier (no PII).
+
+    Forwarded to upstream model providers as their per-user tagging field so trust &
+    safety violations can be attributed to a specific end-user rather than the whole
+    API account. Also used for per-end-user usage breakdowns in /v1/usage. Strongly
+    recommended for partner integrations.
+    """
+
     web_search: bool
     """
     Enable web search grounding — the agent can search the web and download

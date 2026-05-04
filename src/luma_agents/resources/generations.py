@@ -55,6 +55,7 @@ class GenerationsResource(SyncAPIResource):
         source: Optional[generation_create_params.Source] | Omit = omit,
         style: Literal["auto", "manga"] | Omit = omit,
         type: Literal["image", "image_edit"] | Omit = omit,
+        user_id: Optional[str] | Omit = omit,
         web_search: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -87,6 +88,12 @@ class GenerationsResource(SyncAPIResource):
 
           type: The kind of generation to perform
 
+          user_id: Your end-user's stable opaque identifier (no PII). Forwarded to upstream model
+              providers as their per-user tagging field so trust & safety violations can be
+              attributed to a specific end-user rather than the whole API account. Also used
+              for per-end-user usage breakdowns in /v1/usage. Strongly recommended for partner
+              integrations.
+
           web_search: Enable web search grounding — the agent can search the web and download
               reference images before generating.
 
@@ -110,6 +117,7 @@ class GenerationsResource(SyncAPIResource):
                     "source": source,
                     "style": style,
                     "type": type,
+                    "user_id": user_id,
                     "web_search": web_search,
                 },
                 generation_create_params.GenerationCreateParams,
@@ -187,6 +195,7 @@ class AsyncGenerationsResource(AsyncAPIResource):
         source: Optional[generation_create_params.Source] | Omit = omit,
         style: Literal["auto", "manga"] | Omit = omit,
         type: Literal["image", "image_edit"] | Omit = omit,
+        user_id: Optional[str] | Omit = omit,
         web_search: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -219,6 +228,12 @@ class AsyncGenerationsResource(AsyncAPIResource):
 
           type: The kind of generation to perform
 
+          user_id: Your end-user's stable opaque identifier (no PII). Forwarded to upstream model
+              providers as their per-user tagging field so trust & safety violations can be
+              attributed to a specific end-user rather than the whole API account. Also used
+              for per-end-user usage breakdowns in /v1/usage. Strongly recommended for partner
+              integrations.
+
           web_search: Enable web search grounding — the agent can search the web and download
               reference images before generating.
 
@@ -242,6 +257,7 @@ class AsyncGenerationsResource(AsyncAPIResource):
                     "source": source,
                     "style": style,
                     "type": type,
+                    "user_id": user_id,
                     "web_search": web_search,
                 },
                 generation_create_params.GenerationCreateParams,
