@@ -9,14 +9,17 @@ and offers both synchronous and asynchronous clients powered by [httpx](https://
 
 ## Documentation
 
-The REST API documentation can be found on [luma-agents.stldocs.app](https://luma-agents.stldocs.app). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.agents.lumalabs.ai](https://docs.agents.lumalabs.ai). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
 ```sh
-# install from PyPI
-pip install luma-agents
+# install from this staging repo
+pip install git+ssh://git@github.com/stainless-sdks/luma-agents-python.git
 ```
+
+> [!NOTE]
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install luma-agents`
 
 ## Usage
 
@@ -78,8 +81,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from PyPI
-pip install luma-agents[aiohttp]
+# install from this staging repo
+pip install 'luma-agents[aiohttp] @ git+ssh://git@github.com/stainless-sdks/luma-agents-python.git'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -278,9 +281,9 @@ generation = response.parse()  # get the object that `generations.create()` woul
 print(generation.id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/lumalabs/luma-agents-python/tree/main/src/luma_agents/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/luma-agents-python/tree/main/src/luma_agents/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/lumalabs/luma-agents-python/tree/main/src/luma_agents/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/luma-agents-python/tree/main/src/luma_agents/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -388,7 +391,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/lumalabs/luma-agents-python/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/luma-agents-python/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 
