@@ -14,12 +14,9 @@ The REST API documentation can be found on [docs.agents.lumalabs.ai](https://doc
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/lumalabs/luma-agents-python.git
+# install from PyPI
+pip install luma-agents
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install luma-agents`
 
 ## Usage
 
@@ -81,8 +78,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from the production repo
-pip install 'luma-agents[aiohttp] @ git+ssh://git@github.com/lumalabs/luma-agents-python.git'
+# install from PyPI
+pip install luma-agents[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
