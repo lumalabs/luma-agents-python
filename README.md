@@ -9,7 +9,7 @@ and offers both synchronous and asynchronous clients powered by [httpx](https://
 
 ## Documentation
 
-The REST API documentation can be found on [luma-agents.stldocs.app](https://luma-agents.stldocs.app). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.agents.lumalabs.ai](https://docs.agents.lumalabs.ai). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 

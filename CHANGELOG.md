@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.1 (2026-05-05)
+
+Full Changelog: [v0.1.0...v0.1.1](https://github.com/lumalabs/luma-agents-python/compare/v0.1.0...v0.1.1)
+
+### Chores
+
+* update SDK settings ([a6def59](https://github.com/lumalabs/luma-agents-python/commit/a6def59a1fc46a248b3cc070766acee5d9fd477c))
+
+
+### Documentation
+
+* **internal:** update installation instructions for PyPI release ([9df52e5](https://github.com/lumalabs/luma-agents-python/commit/9df52e5490256205e8c5a27d8109f46cd78033b8))
+* **internal:** update REST API documentation URL ([41d97dc](https://github.com/lumalabs/luma-agents-python/commit/41d97dc30e5176d1ddb344f479244d11cd7d5fed))
+
 ## 0.1.0 (2026-05-04)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/lumalabs/luma-agents-python/compare/v0.0.1...v0.1.0)
