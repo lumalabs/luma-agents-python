@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 (2026-06-01)
+
+Full Changelog: [v0.1.1...v0.2.0](https://github.com/lumalabs/luma-agents-python/compare/v0.1.1...v0.2.0)
+
+### Features
+
+* **internal/types:** support eagerly validating pydantic iterators ([f36efce](https://github.com/lumalabs/luma-agents-python/commit/f36efceb98c17250fba0543b27176e42b37955df))
+
+
+### Bug Fixes
+
+* **client:** add missing f-string prefix in file type error message ([9967be8](https://github.com/lumalabs/luma-agents-python/commit/9967be8b65133699a60f79a2b8e50c2c014e8e91))
+
 ## 0.1.1 (2026-05-05)
 
 Full Changelog: [v0.1.0...v0.1.1](https://github.com/lumalabs/luma-agents-python/compare/v0.1.0...v0.1.1)
