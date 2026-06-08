@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (2026-06-08)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/lumalabs/luma-agents-python/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** add video generation/editing, ray-3.14/ray-3.2 models, video params to generations ([d253af3](https://github.com/lumalabs/luma-agents-python/commit/d253af359d36f3a4ab4837d2157d87a15270ec41))
+
 ## 0.2.0 (2026-06-01)
 
 Full Changelog: [v0.1.1...v0.2.0](https://github.com/lumalabs/luma-agents-python/compare/v0.1.1...v0.2.0)
