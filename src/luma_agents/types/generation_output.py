@@ -9,7 +9,7 @@ class GenerationOutput(BaseModel):
     """A single generated output"""
 
     type: str
-    """Media type (e.g. image)"""
+    """Media type (e.g. image, video)"""
 
     url: str
     """Presigned URL (1hr expiry)"""
