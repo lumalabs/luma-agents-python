@@ -26,7 +26,7 @@ class Generation(BaseModel):
     state: Literal["queued", "processing", "completed", "failed"]
     """Current state of the generation"""
 
-    type: Literal["image", "image_edit"]
+    type: Literal["image", "image_edit", "video", "video_edit", "video_reframe"]
     """The kind of generation to perform"""
 
     failure_code: Optional[GenerationFailureCode] = None

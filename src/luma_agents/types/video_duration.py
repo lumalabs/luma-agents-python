@@ -2,6 +2,6 @@
 
 from typing_extensions import Literal, TypeAlias
 
-__all__ = ["Model"]
+__all__ = ["VideoDuration"]
 
-Model: TypeAlias = Literal["uni-1", "uni-1-max", "ray-3.2"]
+VideoDuration: TypeAlias = Literal["5s", "10s"]
