@@ -3,7 +3,26 @@
 Types:
 
 ```python
-from luma_agents.types import Generation, GenerationFailureCode, GenerationOutput, Model
+from luma_agents.types import (
+    AdvancedControls,
+    DepthControl,
+    FaceControl,
+    Generation,
+    GenerationFailureCode,
+    GenerationOutput,
+    ImageRef,
+    Model,
+    NormalsControl,
+    PoseControl,
+    PoseControlStrength,
+    SourcePosition,
+    TrajectoryControl,
+    VideoDuration,
+    VideoEditOptions,
+    VideoEditStrength,
+    VideoOptions,
+    VideoResolution,
+)
 ```
 
 Methods:

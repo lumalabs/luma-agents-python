@@ -2,6 +2,6 @@
 
 from typing_extensions import Literal, TypeAlias
 
-__all__ = ["Model"]
+__all__ = ["VideoResolution"]
 
-Model: TypeAlias = Literal["uni-1", "uni-1-max", "ray-3.2"]
+VideoResolution: TypeAlias = Literal["540p", "720p", "1080p"]
