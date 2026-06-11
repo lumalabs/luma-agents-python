@@ -90,8 +90,17 @@ class TestGenerations:
                 },
                 "exr_export": True,
                 "hdr": True,
+                "keyframe_indexes": [0],
+                "keyframes": [
+                    {
+                        "data": "data",
+                        "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+                        "media_type": "media_type",
+                        "url": "url",
+                    }
+                ],
                 "loop": True,
-                "resolution": "540p",
+                "resolution": "360p",
                 "source_position": {
                     "h_norm": 1,
                     "w_norm": 1,
@@ -250,8 +259,17 @@ class TestAsyncGenerations:
                 },
                 "exr_export": True,
                 "hdr": True,
+                "keyframe_indexes": [0],
+                "keyframes": [
+                    {
+                        "data": "data",
+                        "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+                        "media_type": "media_type",
+                        "url": "url",
+                    }
+                ],
                 "loop": True,
-                "resolution": "540p",
+                "resolution": "360p",
                 "source_position": {
                     "h_norm": 1,
                     "w_norm": 1,
