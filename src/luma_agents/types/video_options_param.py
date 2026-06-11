@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import TypedDict
 
 from .video_duration import VideoDuration
@@ -26,7 +26,8 @@ class VideoOptionsParam(TypedDict, total=False):
     edit: Optional[VideoEditOptionsParam]
     """Ray 3.2 video-to-video edit controls.
 
-    Only valid under `video.edit` when `type` is `video_edit`.
+    Only valid under `video.edit` when `type` is `video_edit`. The source video must
+    be 18 seconds or shorter; output duration matches the source.
     """
 
     end_frame: Optional[ImageRefParam]
@@ -46,6 +47,25 @@ class VideoOptionsParam(TypedDict, total=False):
     hdr: Optional[bool]
     """Generate HDR video. Requires HDR access. Not supported for video_reframe."""
 
+    keyframe_indexes: Optional[Iterable[int]]
+    """
+    Parallel list of non-negative, unique output-frame positions where each
+    keyframes[i] is anchored, in the duration x 24fps grid (5s -> 0..120, 10s ->
+    0..240). Must match keyframes in length.
+    """
+
+    keyframes: Optional[Iterable[ImageRefParam]]
+    """
+    Image-to-video guide frames (type=video only), each pinned to an output-frame
+    position via the parallel keyframe_indexes. 1-64 anchors: a single anchor is a
+    valid start-pinned i2v (an alternate to start_frame), and any count up to 64
+    places guide frames at arbitrary positions. Unlike start_frame/end_frame (the
+    legacy 2-frame surface), this supports arbitrary positions, 10s durations, and
+    HDR. Mutually exclusive with start_frame / end_frame / loop. Only supported on
+    model ray-3.2. For video-to-video keyframes use video.edit.keyframes on
+    type=video_edit instead.
+    """
+
     loop: Optional[bool]
     """Generate a seamlessly looping video.
 
@@ -55,8 +75,11 @@ class VideoOptionsParam(TypedDict, total=False):
     resolution: Optional[VideoResolution]
     """Ray 3.2 video output resolution.
 
-    1080p is public for video generation; video_reframe 1080p is still rolling out
-    and may return a coming-soon validation error until enabled for the caller.
+    360p is the draft tier (fast, low-cost previews), accepted on type=video,
+    video_edit, and video_reframe; on type=video it is SDR-only (not valid with
+    hdr=true). 1080p is public for video generation; video_reframe 1080p is still
+    rolling out and may return a coming-soon validation error until enabled for the
+    caller.
     """
 
     source_position: Optional[SourcePositionParam]
