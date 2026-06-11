@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["VideoResolution"]
 
-VideoResolution: TypeAlias = Literal["540p", "720p", "1080p"]
+VideoResolution: TypeAlias = Literal["360p", "540p", "720p", "1080p"]
