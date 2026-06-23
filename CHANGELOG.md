@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 (2026-06-23)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/lumalabs/luma-agents-python/compare/v0.3.0...v0.4.0)
+
+### Features
+
+* **api:** add files resource, file_id support in image refs ([4fd928a](https://github.com/lumalabs/luma-agents-python/commit/4fd928ab82faab241fc18ddcce86b7f76a02d288))
+* **api:** add keyframe_indexes and keyframes fields to video_options ([f8d3c16](https://github.com/lumalabs/luma-agents-python/commit/f8d3c165670eebfd44609c3d7c51772745bfcf59))
+
 ## 0.3.0 (2026-06-08)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/lumalabs/luma-agents-python/compare/v0.2.0...v0.3.0)
