@@ -45,12 +45,13 @@ class GenerationCreateParams(TypedDict, total=False):
     source: Optional[ImageRefParam]
     """Media reference for guided generation.
 
-    Provide exactly one of url, inline base64 data, or generation_id. URL/data
-    references accept image media at image positions; video_edit and video_reframe
-    sources also accept source.url or source.data when source.media_type is a
-    video/\\** MIME. generation_id chains image_edit off a prior image output,
-    video_edit/video_reframe off a prior video output, and
-    video.start_frame/end_frame for extension.
+    Provide exactly one of url, inline base64 data, generation_id, or file_id.
+    URL/data references accept image media at image positions; video_edit and
+    video_reframe sources also accept source.url or source.data when
+    source.media_type is a video/\\** MIME. generation_id chains image_edit off a
+    prior image output, video_edit/video_reframe off a prior video output, and
+    video.start_frame/end_frame for extension. file_id references a file previously
+    uploaded via POST /files — see the Files API.
     """
 
     style: Literal["auto", "manga"]

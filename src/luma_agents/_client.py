@@ -35,7 +35,8 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import generations
+    from .resources import files, generations
+    from .resources.files import FilesResource, AsyncFilesResource
     from .resources.generations import GenerationsResource, AsyncGenerationsResource
 
 __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Luma", "AsyncLuma", "Client", "AsyncClient"]
@@ -110,6 +111,12 @@ class Luma(SyncAPIClient):
         from .resources.generations import GenerationsResource
 
         return GenerationsResource(self)
+
+    @cached_property
+    def files(self) -> FilesResource:
+        from .resources.files import FilesResource
+
+        return FilesResource(self)
 
     @cached_property
     def with_raw_response(self) -> LumaWithRawResponse:
@@ -295,6 +302,12 @@ class AsyncLuma(AsyncAPIClient):
         return AsyncGenerationsResource(self)
 
     @cached_property
+    def files(self) -> AsyncFilesResource:
+        from .resources.files import AsyncFilesResource
+
+        return AsyncFilesResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncLumaWithRawResponse:
         return AsyncLumaWithRawResponse(self)
 
@@ -419,6 +432,12 @@ class LumaWithRawResponse:
 
         return GenerationsResourceWithRawResponse(self._client.generations)
 
+    @cached_property
+    def files(self) -> files.FilesResourceWithRawResponse:
+        from .resources.files import FilesResourceWithRawResponse
+
+        return FilesResourceWithRawResponse(self._client.files)
+
 
 class AsyncLumaWithRawResponse:
     _client: AsyncLuma
@@ -431,6 +450,12 @@ class AsyncLumaWithRawResponse:
         from .resources.generations import AsyncGenerationsResourceWithRawResponse
 
         return AsyncGenerationsResourceWithRawResponse(self._client.generations)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithRawResponse:
+        from .resources.files import AsyncFilesResourceWithRawResponse
+
+        return AsyncFilesResourceWithRawResponse(self._client.files)
 
 
 class LumaWithStreamedResponse:
@@ -445,6 +470,12 @@ class LumaWithStreamedResponse:
 
         return GenerationsResourceWithStreamingResponse(self._client.generations)
 
+    @cached_property
+    def files(self) -> files.FilesResourceWithStreamingResponse:
+        from .resources.files import FilesResourceWithStreamingResponse
+
+        return FilesResourceWithStreamingResponse(self._client.files)
+
 
 class AsyncLumaWithStreamedResponse:
     _client: AsyncLuma
@@ -457,6 +488,12 @@ class AsyncLumaWithStreamedResponse:
         from .resources.generations import AsyncGenerationsResourceWithStreamingResponse
 
         return AsyncGenerationsResourceWithStreamingResponse(self._client.generations)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithStreamingResponse:
+        from .resources.files import AsyncFilesResourceWithStreamingResponse
+
+        return AsyncFilesResourceWithStreamingResponse(self._client.files)
 
 
 Client = Luma

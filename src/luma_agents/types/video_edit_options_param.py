@@ -15,7 +15,7 @@ __all__ = ["VideoEditOptionsParam"]
 class VideoEditOptionsParam(TypedDict, total=False):
     """Ray 3.2 video-to-video edit controls.
 
-    Only valid under `video.edit` when `type` is `video_edit`.
+    Only valid under `video.edit` when `type` is `video_edit`. The source video must be 18 seconds or shorter; output duration matches the source.
     """
 
     auto_controls: Optional[bool]

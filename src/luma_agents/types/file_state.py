@@ -2,6 +2,6 @@
 
 from typing_extensions import Literal, TypeAlias
 
-__all__ = ["VideoResolution"]
+__all__ = ["FileState"]
 
-VideoResolution: TypeAlias = Literal["360p", "540p", "720p", "1080p"]
+FileState: TypeAlias = Literal["pending", "ready", "failed", "deleted"]
