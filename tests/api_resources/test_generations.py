@@ -32,6 +32,7 @@ class TestGenerations:
             image_ref=[
                 {
                     "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "media_type": "media_type",
                     "url": "url",
@@ -41,6 +42,7 @@ class TestGenerations:
             output_format="png",
             source={
                 "data": "data",
+                "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                 "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                 "media_type": "media_type",
                 "url": "url",
@@ -75,6 +77,7 @@ class TestGenerations:
                     "keyframes": [
                         {
                             "data": "data",
+                            "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                             "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                             "media_type": "media_type",
                             "url": "url",
@@ -84,6 +87,7 @@ class TestGenerations:
                 },
                 "end_frame": {
                     "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "media_type": "media_type",
                     "url": "url",
@@ -94,6 +98,7 @@ class TestGenerations:
                 "keyframes": [
                     {
                         "data": "data",
+                        "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                         "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                         "media_type": "media_type",
                         "url": "url",
@@ -109,6 +114,7 @@ class TestGenerations:
                 },
                 "start_frame": {
                     "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "media_type": "media_type",
                     "url": "url",
@@ -201,6 +207,7 @@ class TestAsyncGenerations:
             image_ref=[
                 {
                     "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "media_type": "media_type",
                     "url": "url",
@@ -210,6 +217,7 @@ class TestAsyncGenerations:
             output_format="png",
             source={
                 "data": "data",
+                "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                 "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                 "media_type": "media_type",
                 "url": "url",
@@ -244,6 +252,7 @@ class TestAsyncGenerations:
                     "keyframes": [
                         {
                             "data": "data",
+                            "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                             "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                             "media_type": "media_type",
                             "url": "url",
@@ -253,6 +262,7 @@ class TestAsyncGenerations:
                 },
                 "end_frame": {
                     "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "media_type": "media_type",
                     "url": "url",
@@ -263,6 +273,7 @@ class TestAsyncGenerations:
                 "keyframes": [
                     {
                         "data": "data",
+                        "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                         "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                         "media_type": "media_type",
                         "url": "url",
@@ -278,6 +289,7 @@ class TestAsyncGenerations:
                 },
                 "start_frame": {
                     "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
                     "media_type": "media_type",
                     "url": "url",
