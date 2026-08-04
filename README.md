@@ -127,9 +127,9 @@ client = Luma()
 
 generation = client.generations.create(
     prompt="A glass of iced coffee on a marble countertop, morning light streaming through a window",
-    source={},
+    layering={},
 )
-print(generation.source)
+print(generation.layering)
 ```
 
 ## Handling errors
