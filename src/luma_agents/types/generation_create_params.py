@@ -9,7 +9,7 @@ from .model import Model
 from .image_ref_param import ImageRefParam
 from .video_options_param import VideoOptionsParam
 
-__all__ = ["GenerationCreateParams"]
+__all__ = ["GenerationCreateParams", "Layering"]
 
 
 class GenerationCreateParams(TypedDict, total=False):
@@ -29,6 +29,14 @@ class GenerationCreateParams(TypedDict, total=False):
     """Reference images for style/content guidance.
 
     Up to 9 for type 'image', up to 8 for type 'image_edit'.
+    """
+
+    layering: Optional[Layering]
+    """Layer-extraction options for type=layering (model uni-1).
+
+    The image to decompose rides body.source; body.prompt optionally guides how to
+    split it (max 500 characters). The server plans the layers automatically before
+    generating.
     """
 
     model: Model
@@ -57,7 +65,7 @@ class GenerationCreateParams(TypedDict, total=False):
     style: Literal["auto", "manga"]
     """Style preset (auto, manga)"""
 
-    type: Literal["image", "image_edit", "video", "video_edit", "video_reframe"]
+    type: Literal["image", "image_edit", "video", "video_edit", "video_reframe", "layering"]
     """The kind of generation to perform"""
 
     user_id: Optional[str]
@@ -81,4 +89,18 @@ class GenerationCreateParams(TypedDict, total=False):
     """
     Enable web search grounding — the agent can search the web and download
     reference images before generating.
+    """
+
+
+class Layering(TypedDict, total=False):
+    """Layer-extraction options for type=layering (model uni-1).
+
+    The image to decompose rides body.source; body.prompt optionally guides how to split it (max 500 characters). The server plans the layers automatically before generating.
+    """
+
+    resolution: Literal["1k", "2k"]
+    """Output resolution for every extracted layer.
+
+    1k is faster and lower cost; 2k re-renders each layer at higher quality (priced
+    higher, per layer).
     """

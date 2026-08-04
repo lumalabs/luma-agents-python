@@ -56,11 +56,12 @@ class GenerationsResource(SyncAPIResource):
         ]
         | Omit = omit,
         image_ref: Iterable[ImageRefParam] | Omit = omit,
+        layering: Optional[generation_create_params.Layering] | Omit = omit,
         model: Model | Omit = omit,
         output_format: Optional[Literal["png", "jpeg"]] | Omit = omit,
         source: Optional[ImageRefParam] | Omit = omit,
         style: Literal["auto", "manga"] | Omit = omit,
-        type: Literal["image", "image_edit", "video", "video_edit", "video_reframe"] | Omit = omit,
+        type: Literal["image", "image_edit", "video", "video_edit", "video_reframe", "layering"] | Omit = omit,
         user_id: Optional[str] | Omit = omit,
         video: Optional[VideoOptionsParam] | Omit = omit,
         web_search: bool | Omit = omit,
@@ -84,6 +85,10 @@ class GenerationsResource(SyncAPIResource):
 
           image_ref: Reference images for style/content guidance. Up to 9 for type 'image', up to 8
               for type 'image_edit'.
+
+          layering: Layer-extraction options for type=layering (model uni-1). The image to decompose
+              rides body.source; body.prompt optionally guides how to split it (max 500
+              characters). The server plans the layers automatically before generating.
 
           model: Model identifier. `uni-1` is the default image tier; `uni-1-max` produces
               higher-quality output than `uni-1` at a higher per-image price. `ray-3.2` is the
@@ -132,6 +137,7 @@ class GenerationsResource(SyncAPIResource):
                     "prompt": prompt,
                     "aspect_ratio": aspect_ratio,
                     "image_ref": image_ref,
+                    "layering": layering,
                     "model": model,
                     "output_format": output_format,
                     "source": source,
@@ -214,11 +220,12 @@ class AsyncGenerationsResource(AsyncAPIResource):
         ]
         | Omit = omit,
         image_ref: Iterable[ImageRefParam] | Omit = omit,
+        layering: Optional[generation_create_params.Layering] | Omit = omit,
         model: Model | Omit = omit,
         output_format: Optional[Literal["png", "jpeg"]] | Omit = omit,
         source: Optional[ImageRefParam] | Omit = omit,
         style: Literal["auto", "manga"] | Omit = omit,
-        type: Literal["image", "image_edit", "video", "video_edit", "video_reframe"] | Omit = omit,
+        type: Literal["image", "image_edit", "video", "video_edit", "video_reframe", "layering"] | Omit = omit,
         user_id: Optional[str] | Omit = omit,
         video: Optional[VideoOptionsParam] | Omit = omit,
         web_search: bool | Omit = omit,
@@ -242,6 +249,10 @@ class AsyncGenerationsResource(AsyncAPIResource):
 
           image_ref: Reference images for style/content guidance. Up to 9 for type 'image', up to 8
               for type 'image_edit'.
+
+          layering: Layer-extraction options for type=layering (model uni-1). The image to decompose
+              rides body.source; body.prompt optionally guides how to split it (max 500
+              characters). The server plans the layers automatically before generating.
 
           model: Model identifier. `uni-1` is the default image tier; `uni-1-max` produces
               higher-quality output than `uni-1` at a higher per-image price. `ray-3.2` is the
@@ -290,6 +301,7 @@ class AsyncGenerationsResource(AsyncAPIResource):
                     "prompt": prompt,
                     "aspect_ratio": aspect_ratio,
                     "image_ref": image_ref,
+                    "layering": layering,
                     "model": model,
                     "output_format": output_format,
                     "source": source,
