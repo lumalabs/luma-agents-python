@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 (2026-08-04)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/lumalabs/luma-agents-python/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** add layering parameter, type enum, Layer/Layering models to generations ([6206d27](https://github.com/lumalabs/luma-agents-python/commit/6206d274b27c2fce8faeb7f1824ca9a782d1a517))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([8bb3cfc](https://github.com/lumalabs/luma-agents-python/commit/8bb3cfcd6c1c1541b7e0170d4d4934d95713bea3))
+
 ## 0.4.0 (2026-06-23)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/lumalabs/luma-agents-python/compare/v0.3.0...v0.4.0)
