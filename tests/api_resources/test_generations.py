@@ -94,6 +94,13 @@ class TestGenerations:
                     "url": "url",
                 },
                 "exr_export": True,
+                "guide_frame": {
+                    "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+                    "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+                    "media_type": "media_type",
+                    "url": "url",
+                },
                 "hdr": True,
                 "keyframe_indexes": [0],
                 "keyframes": [
@@ -270,6 +277,13 @@ class TestAsyncGenerations:
                     "url": "url",
                 },
                 "exr_export": True,
+                "guide_frame": {
+                    "data": "data",
+                    "file_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+                    "generation_id": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+                    "media_type": "media_type",
+                    "url": "url",
+                },
                 "hdr": True,
                 "keyframe_indexes": [0],
                 "keyframes": [
