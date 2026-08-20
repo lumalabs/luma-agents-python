@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.0 (2026-08-20)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/lumalabs/luma-agents-python/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* **api:** add guide_frame parameter to VideoOptionsParam ([d42b991](https://github.com/lumalabs/luma-agents-python/commit/d42b99172419ab73ad94c82ec70dd77b476c7c74))
+* **api:** add LayerBounds model and bounds field to Layer ([8c33feb](https://github.com/lumalabs/luma-agents-python/commit/8c33feba3a0ec4594118cb808a71ca61801cbd2f))
+
+
+### Chores
+
+* **internal:** allow the mock server port to be set with STAINLESS_MOCK_PORT ([d47d1a4](https://github.com/lumalabs/luma-agents-python/commit/d47d1a415d55c765910a0ce0322ee6d008311787))
+
 ## 0.5.0 (2026-08-04)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/lumalabs/luma-agents-python/compare/v0.4.0...v0.5.0)
